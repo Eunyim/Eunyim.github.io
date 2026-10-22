@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="임은종 게임 기획 포트폴리오 — 길드 매니저 플레이, 게임 기획서, 역기획서">
-<link rel="icon" href="cover.jpg">
+<meta name="description" content="임은종 게임 기획 포트폴리오 · 게임 플레이, 게임 기획서, 역기획서">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%2317122a%27/%3E%3Cpath d=%27M8 9h16M8 16h10M8 23h13%27 stroke=%27%23e6b04a%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
 <title>임은종 게임 기획 포트폴리오</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,7 @@ img{max-width:100%}
   --ink: #eee5d3;
   --muted: #a99fbf;
   --gold: #e6b04a;
+  --grid: rgba(169,159,191,.07);
   --display: "Nanum Myeongjo", "Noto Serif KR", "Apple SD Gothic Neo", serif;
   --body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
@@ -34,13 +35,24 @@ body { background: var(--night); color: var(--ink); font-family: var(--body); fo
 button { font: inherit; color: inherit; }
 
 /* ---------- 첫 화면: 나를 먼저, 작업은 그 아래 ---------- */
-.home { min-height: 100%; padding: 72px 20px 56px; }
+.home { min-height: 100%; padding: 72px 20px 56px; background:
+  radial-gradient(60% 50% at 85% 0%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 70%),
+  radial-gradient(50% 45% at 0% 100%, color-mix(in srgb, #6a54b8 22%, transparent), transparent 70%),
+  linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 32px 32px,
+  linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 32px 32px,
+  var(--night); }
 .home-inner { width: 100%; max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
 .home-head { display: grid; gap: 14px; max-width: 640px; }
 .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
 .home h1 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7vw, 64px); line-height: 1.15; margin: 0; letter-spacing: .02em; }
 .home .role { font-size: 18px; font-weight: 500; margin: 0; }
 .home-head p.about { margin: 0; color: var(--muted); max-width: 58ch; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 4px; font-size: 15px; }
+.contact .lbl { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--gold); }
+.contact a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+.contact a:hover { border-color: var(--gold); }
+.copy { background: none; border: 1px solid var(--line); border-radius: 4px; padding: 2px 10px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.copy:hover { border-color: var(--gold); color: var(--ink); }
 
 .works-label { display: flex; align-items: baseline; gap: 14px; margin: 0 0 18px; font-family: var(--display); font-weight: 800; font-size: 22px; }
 .works-label small { font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--muted); }
@@ -50,8 +62,9 @@ button { font: inherit; color: inherit; }
 .choice > :not(.thumb) { margin-inline: 20px; }
 .choice:hover { border-color: var(--gold); transform: translateY(-3px); }
 @media (prefers-reduced-motion: reduce) { .choice:hover { transform: none; } }
-.choice .thumb { aspect-ratio: 16 / 9; max-width: 100%; background: #0d0a18 center top / cover no-repeat; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
-.choice .thumb.pixel { image-rendering: pixelated; }
+.choice .thumb { aspect-ratio: 16 / 9; max-width: 100%; display: grid; place-items: center; background: linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 16px 16px, linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 16px 16px, #1b1532; border-bottom: 1px solid var(--line); margin-bottom: 8px; color: var(--gold); }
+.choice .thumb svg { width: 46%; height: auto; overflow: visible; }
+.choice .thumb .soft { color: var(--muted); }
 .choice .kind { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--gold); }
 .choice h2 { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1.3; margin: 0; }
 .choice .proj { font-size: 13px; color: var(--ink); opacity: .8; margin-top: -4px; }
@@ -103,33 +116,38 @@ button { font: inherit; color: inherit; }
       <div class="eyebrow">Game Design Portfolio</div>
       <h1>임은종</h1>
       <p class="role">게임 기획자 지망</p>
-      <p class="about">기획서를 쓰는 데서 멈추지 않고, 직접 만들어 보고, 측정한 결과로 다시 고치는 방식으로 일합니다. 혼자 기획하고 개발한 길드 경영 RPG와, 출시작의 핵심 시스템을 뜯어 본 역기획서를 담았습니다.</p>
+      <p class="about">기획서를 쓰는 데서 멈추지 않고, 직접 만들어 보고, 측정한 결과로 다시 고치는 방식으로 일합니다. 혼자 기획하고 개발한 게임과 그 기획서, 출시작의 핵심 시스템을 뜯어 본 역기획서를 담았습니다.</p>
+      <div class="contact">
+        <span class="lbl">CONTACT</span>
+        <a href="mailto:xc0896@naver.com" id="mail">xc0896@naver.com</a>
+        <button class="copy" type="button" id="copy-mail">복사</button>
+      </div>
     </header>
     <section aria-labelledby="works">
       <h2 class="works-label" id="works">작업 <small>보고 싶은 항목을 골라 주세요</small></h2>
       <div class="choices">
         <button class="choice" type="button" data-go="play">
-          <span class="thumb pixel" style="background-image:url('cover.jpg')"></span>
+          <span class="thumb" aria-hidden="true"><svg viewBox="0 0 120 80"><rect x="4" y="6" width="112" height="62" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M50 22 L76 37 L50 52 Z" fill="currentColor"/><rect class="soft" x="16" y="58" width="88" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="16" y="58" width="52" height="3" rx="1.5" fill="currentColor"/><path class="soft" d="M44 76h32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></span>
           <span class="kind">PLAY</span>
           <h2>게임 플레이</h2>
-          <span class="proj">길드 매니저 · 1인 개발 데모</span>
-          <p>설치 없이 브라우저에서 바로 실행되는 WebGL 버전입니다. 튜토리얼부터 데모 엔딩까지 담겨 있습니다.</p>
+          <span class="proj">1인 기획·개발 데모 · 브라우저 실행</span>
+          <p>직접 기획하고 개발한 파티 육성 자동전투 RPG입니다. 설치 없이 튜토리얼부터 데모 엔딩까지 플레이할 수 있습니다.</p>
           <span class="go">플레이하러 가기 →</span>
         </button>
         <button class="choice" type="button" data-go="plans">
-          <span class="thumb" style="background-image:url('docs/plan-01.jpg')"></span>
+          <span class="thumb" aria-hidden="true"><svg viewBox="0 0 120 80"><rect x="6" y="8" width="30" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="45" y="31" width="30" height="18" rx="3" fill="currentColor"/><rect x="84" y="8" width="30" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="84" y="54" width="30" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><path class="soft" d="M36 17 H40 Q44 17 44 22 V36 M75 40 H79 Q80 40 80 36 V22 Q80 17 84 17 M75 40 H79 Q80 40 80 46 V58 Q80 63 84 63" fill="none" stroke="currentColor" stroke-width="2"/><path class="soft" d="M6 54h28M6 62h20M6 70h24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></span>
           <span class="kind">GDD</span>
           <h2>게임 기획서</h2>
-          <span class="proj">길드 매니저 · 통합본 26쪽, 초안 8쪽</span>
-          <p>처음 쓴 초안과, 구현과 측정을 거쳐 고쳐 쓴 통합본입니다.</p>
+          <span class="proj">초안 8쪽 · 통합본 26쪽</span>
+          <p>구현 전에 쓴 초안과, 직접 만들고 측정한 결과로 고쳐 쓴 통합본입니다. 무엇이 남고 무엇이 바뀌었는지 함께 볼 수 있습니다.</p>
           <span class="go">기획서 보기 →</span>
         </button>
         <button class="choice" type="button" data-go="reverse">
-          <span class="thumb" style="background-image:url('docs/nemesis-01.jpg')"></span>
+          <span class="thumb" aria-hidden="true"><svg viewBox="0 0 120 80"><rect class="soft" x="8" y="10" width="22" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><rect class="soft" x="8" y="44" width="22" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><rect class="soft" x="40" y="27" width="22" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 3"/><circle cx="86" cy="36" r="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M100 50 L114 64" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M76 36h20M86 26v20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></span>
           <span class="kind">REVERSE</span>
           <h2>역기획서</h2>
-          <span class="proj">섀도우 오브 워 · 네메시스 시스템 8쪽</span>
-          <p>계급 구조와 생성·변동 규칙을 재구성하고, 설계 의도와 문제점·개선안까지 정리했습니다.</p>
+          <span class="proj">출시작 시스템 분석 · 8쪽</span>
+          <p>출시된 액션 RPG의 적 생성·계급 변동 시스템을 규칙과 구조로 재구성하고, 설계 의도와 문제점, 개선안까지 정리했습니다.</p>
           <span class="go">역기획서 보기 →</span>
         </button>
       </div>
@@ -141,7 +159,7 @@ button { font: inherit; color: inherit; }
 <div class="view" id="v-play" hidden>
   <div class="bar-top">
     <button class="back" type="button" data-go="">← 처음으로</button>
-    <strong>게임 플레이 · 길드 매니저</strong>
+    <strong>게임 플레이</strong>
   </div>
   <div class="play-body">
     <div class="stage">
@@ -183,7 +201,7 @@ button { font: inherit; color: inherit; }
     nemesis: { label: "네메시스", title: "섀도우 오브 워 네메시스 시스템 역기획서", pages: 8 },
   };
   const GROUPS = {
-    plans:   { title: "게임 기획서 · 길드 매니저", docs: ["plan", "draft"] },
+    plans:   { title: "게임 기획서", docs: ["plan", "draft"] },
     reverse: { title: "역기획서", docs: ["nemesis"] },
   };
   const vHome = document.getElementById("v-home");
@@ -246,6 +264,18 @@ button { font: inherit; color: inherit; }
   });
   window.addEventListener("hashchange", route);
   route();
+
+  // ---------- 연락처 복사 ----------
+  const copyBtn = document.getElementById("copy-mail");
+  copyBtn.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText("xc0896@naver.com"); copyBtn.textContent = "복사됨"; }
+    catch (e) {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById("mail"));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      copyBtn.textContent = "선택됨";
+    }
+    setTimeout(() => { copyBtn.textContent = "복사"; }, 1600);
+  });
 
   // ---------- 게임 (WebGL) ----------
   // wasm·data는 gzip 후 9MB 조각으로 나눠 .wasm 이름으로 올렸고(아티팩트가 서빙하는 확장자), 받아서 합친 뒤 브라우저에서 풀어 Unity 로더에 넘긴다.
