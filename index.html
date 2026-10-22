@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="임은종 게임 기획 포트폴리오 — 길드 매니저 플레이, 게임 기획서, 역기획서">
+<link rel="icon" href="cover.jpg">
+<title>임은종 게임 기획 포트폴리오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* 레이아웃: 첫 화면은 게임 타이틀 그림 위에 세 갈래 선택지. 하나를 고르면 그 화면만 열리고, 위 막대의 '처음으로'로 돌아온다. 게임 타이틀의 보라·금색을 가져온 단일 다크 테마. */
+:root {
+  --night: #17122a;
+  --panel: #221a3b;
+  --line: #3a2f5c;
+  --ink: #eee5d3;
+  --muted: #a99fbf;
+  --gold: #e6b04a;
+  --display: "Nanum Myeongjo", "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  --body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--night); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.7; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+button { font: inherit; color: inherit; }
+
+/* ---------- 첫 화면 ---------- */
+.home { min-height: 100%; display: grid; align-content: center; padding: 48px 20px; background:
+  linear-gradient(to bottom, rgba(23,18,42,.55), rgba(23,18,42,.92) 70%, var(--night)),
+  #0d0a18 url("cover.jpg") center top / cover no-repeat; image-rendering: pixelated; }
+.home-inner { width: 100%; max-width: 1040px; margin: 0 auto; display: grid; gap: 36px; }
+.home-head { display: grid; gap: 10px; text-align: center; justify-items: center; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.home h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 46px); line-height: 1.25; margin: 0; text-wrap: balance; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.home-head p { margin: 0; max-width: 56ch; color: var(--ink); text-shadow: 0 1px 8px rgba(0,0,0,.7); }
+
+.choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 760px) { .choices { grid-template-columns: 1fr; } }
+.choice { display: grid; grid-template-rows: auto auto 1fr auto; gap: 8px; text-align: left; padding: 24px 22px 20px; background: rgba(28,21,50,.88); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; min-width: 0; transition: border-color .15s, transform .15s; }
+.choice:hover { border-color: var(--gold); transform: translateY(-3px); }
+@media (prefers-reduced-motion: reduce) { .choice:hover { transform: none; } }
+.choice .kind { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--gold); }
+.choice h2 { font-family: var(--display); font-weight: 800; font-size: 24px; line-height: 1.3; margin: 0; }
+.choice p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.choice .go { font-size: 14px; font-weight: 600; color: var(--gold); }
+
+/* ---------- 각 화면 공통 막대 ---------- */
+.view { min-height: 100%; display: grid; grid-template-rows: auto 1fr; }
+.bar-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 10px 20px; background: color-mix(in srgb, var(--night) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.back { background: none; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
+.back:hover { border-color: var(--gold); }
+.bar-top strong { font-family: var(--display); font-weight: 800; font-size: 17px; min-width: 0; }
+.bar-top .spacer { flex: 1; }
+.pg { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tab { background: none; border: 1px solid transparent; border-radius: 4px; padding: 5px 12px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--ink); border-color: var(--gold); }
+
+/* ---------- 게임 ---------- */
+.play-body { width: 100%; max-width: 1200px; margin: 0 auto; padding: 24px 20px 40px; }
+.stage { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: #0d0a18 url("cover.jpg") center / cover no-repeat; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; image-rendering: pixelated; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #000; }
+.gate { position: absolute; inset: 0; display: grid; place-items: end center; padding: 0 16px 7%; background: linear-gradient(to top, rgba(13,10,24,.85), rgba(13,10,24,0) 55%); }
+.gate-inner { display: grid; justify-items: center; gap: 10px; text-align: center; }
+.play { font-weight: 600; font-size: 17px; color: #1d1405; background: var(--gold); border: 0; border-radius: 4px; padding: 12px 28px; cursor: pointer; box-shadow: 0 3px 0 #9a6c1d; }
+.play:hover { filter: brightness(1.08); }
+.play:active { transform: translateY(2px); box-shadow: 0 1px 0 #9a6c1d; }
+.gate small { font-size: 13px; opacity: .85; }
+.bar { width: min(340px, 80vw); height: 6px; background: rgba(255,255,255,.15); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--gold); transition: width .2s; }
+.status { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.status.err { color: #ff9b85; font-family: var(--body); max-width: 46ch; }
+.under { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; margin-top: 12px; font-size: 14px; color: var(--muted); }
+.ghost { background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 7px 14px; font-size: 14px; cursor: pointer; }
+.ghost:hover:not(:disabled) { border-color: var(--gold); }
+.ghost:disabled { opacity: .4; cursor: default; }
+
+/* ---------- 문서 ---------- */
+.pages { padding: 24px 16px 60px; display: grid; justify-items: center; gap: 18px; }
+.pages img { width: min(860px, 100%); aspect-ratio: 1240 / 1754; background: #fff; display: block; box-shadow: 0 10px 28px rgba(0,0,0,.4); }
+</style>
+</head>
+<body>
+
+<!-- 첫 화면 -->
+<div class="home" id="v-home">
+  <div class="home-inner">
+    <div class="home-head">
+      <div class="eyebrow">임은종 · 게임 기획 포트폴리오</div>
+      <h1>길드 매니저</h1>
+      <p>모험가를 고용해 파티를 짜고 던전으로 보내, 자동 전투를 지켜보며 더 갈지, 돌아갈지, 도망칠지를 판단하는 길드 경영 RPG입니다.</p>
+    </div>
+    <div class="choices">
+      <button class="choice" type="button" data-go="play">
+        <span class="kind">PLAY</span>
+        <h2>게임 플레이</h2>
+        <p>설치 없이 브라우저에서 바로 실행되는 WebGL 버전입니다. 튜토리얼부터 데모 엔딩까지 담겨 있습니다.</p>
+        <span class="go">플레이하러 가기 →</span>
+      </button>
+      <button class="choice" type="button" data-go="plans">
+        <span class="kind">GDD</span>
+        <h2>게임 기획서</h2>
+        <p>구현과 측정을 거쳐 고쳐 쓴 통합본(26쪽)과, 처음 쓴 초안(8쪽)입니다.</p>
+        <span class="go">기획서 보기 →</span>
+      </button>
+      <button class="choice" type="button" data-go="reverse">
+        <span class="kind">REVERSE</span>
+        <h2>역기획서</h2>
+        <p>섀도우 오브 워의 네메시스 시스템을 계급 구조와 생성·변동 규칙으로 다시 쓴 문서(8쪽)입니다.</p>
+        <span class="go">역기획서 보기 →</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 게임 플레이 -->
+<div class="view" id="v-play" hidden>
+  <div class="bar-top">
+    <button class="back" type="button" data-go="">← 처음으로</button>
+    <strong>게임 플레이</strong>
+  </div>
+  <div class="play-body">
+    <div class="stage">
+      <canvas id="unity-canvas" tabindex="-1" hidden></canvas>
+      <div class="gate" id="gate">
+        <div class="gate-inner">
+          <button class="play" id="play-btn" type="button">플레이 시작</button>
+          <div class="bar" id="bar" hidden><i id="bar-fill"></i></div>
+          <div class="status" id="status" aria-live="polite"></div>
+          <small id="gate-note">처음 한 번 약 30MB를 내려받습니다</small>
+        </div>
+      </div>
+    </div>
+    <div class="under">
+      <span>PC의 Chrome·Edge 권장 · 마우스 조작 · 진행 상황은 이 브라우저에만 저장됩니다</span>
+      <button class="ghost" id="fs-btn" type="button" disabled>전체 화면</button>
+    </div>
+  </div>
+</div>
+
+<!-- 문서 (기획서·역기획서 공용) -->
+<div class="view" id="v-doc" hidden>
+  <div class="bar-top">
+    <button class="back" type="button" data-go="">← 처음으로</button>
+    <strong id="doc-title"></strong>
+    <div class="tabs" id="doc-tabs" role="tablist"></div>
+    <span class="spacer"></span>
+    <span class="pg" id="doc-pg"></span>
+  </div>
+  <div class="pages" id="pages"></div>
+</div>
+
+<script>
+(() => {
+  // ---------- 화면 전환 ----------
+  const DOCS = {
+    plan:    { label: "통합본", title: "길드 매니저 게임 기획서 (통합본)", pages: 26 },
+    draft:   { label: "초안", title: "길드 매니저 기획서 초안", pages: 8 },
+    nemesis: { label: "네메시스", title: "섀도우 오브 워 네메시스 시스템 역기획서", pages: 8 },
+  };
+  const GROUPS = {
+    plans:   { title: "게임 기획서", docs: ["plan", "draft"] },
+    reverse: { title: "역기획서", docs: ["nemesis"] },
+  };
+  const vHome = document.getElementById("v-home");
+  const vPlay = document.getElementById("v-play");
+  const vDoc = document.getElementById("v-doc");
+  const pagesEl = document.getElementById("pages");
+  const pgEl = document.getElementById("doc-pg");
+  const tabsEl = document.getElementById("doc-tabs");
+  let io = null;
+
+  function showDoc(key) {
+    const d = DOCS[key];
+    pagesEl.textContent = "";
+    for (let i = 1; i <= d.pages; i++) {
+      const img = new Image();
+      img.loading = "lazy"; img.decoding = "async";
+      img.alt = `${d.title} ${i}쪽`;
+      img.dataset.n = i;
+      img.src = `docs/${key}-${String(i).padStart(2, "0")}.jpg`;
+      pagesEl.appendChild(img);
+    }
+    tabsEl.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.doc === key ? "true" : "false"));
+    pgEl.textContent = `1 / ${d.pages}쪽`;
+    if (io) io.disconnect();
+    io = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) pgEl.textContent = `${e.target.dataset.n} / ${d.pages}쪽`; });
+    }, { threshold: 0.4 });
+    pagesEl.querySelectorAll("img").forEach(im => io.observe(im));
+    window.scrollTo(0, 0);
+  }
+
+  function route() {
+    const h = location.hash.replace("#", "");
+    vHome.hidden = !!(h && (h === "play" || GROUPS[h]));
+    vPlay.hidden = h !== "play";
+    vDoc.hidden = !GROUPS[h];
+    if (GROUPS[h]) {
+      const g = GROUPS[h];
+      document.getElementById("doc-title").textContent = g.title;
+      tabsEl.textContent = "";
+      if (g.docs.length > 1) {
+        g.docs.forEach(k => {
+          const t = document.createElement("button");
+          t.type = "button"; t.className = "tab"; t.setAttribute("role", "tab");
+          t.dataset.doc = k; t.textContent = DOCS[k].label;
+          t.addEventListener("click", () => showDoc(k));
+          tabsEl.appendChild(t);
+        });
+      }
+      showDoc(g.docs[0]);
+    } else {
+      if (io) io.disconnect();
+      window.scrollTo(0, 0);
+    }
+  }
+  document.addEventListener("click", e => {
+    const el = e.target.closest("[data-go]");
+    if (!el) return;
+    location.hash = el.dataset.go;
+  });
+  window.addEventListener("hashchange", route);
+  route();
+
+  // ---------- 게임 (WebGL) ----------
+  // wasm·data는 gzip 후 9MB 조각으로 나눠 .wasm 이름으로 올렸고(아티팩트가 서빙하는 확장자), 받아서 합친 뒤 브라우저에서 풀어 Unity 로더에 넘긴다.
+  const PARTS = {
+    code: { files: ["game/wasm.0.part.wasm", "game/wasm.1.part.wasm"], size: 13023152, type: "application/wasm" },
+    data: { files: ["game/data.0.part.wasm", "game/data.1.part.wasm"], size: 16456182, type: "application/octet-stream" },
+  };
+  const TOTAL = PARTS.code.size + PARTS.data.size;
+  const btn = document.getElementById("play-btn");
+  const bar = document.getElementById("bar");
+  const fill = document.getElementById("bar-fill");
+  const statusEl = document.getElementById("status");
+  const note = document.getElementById("gate-note");
+  const gate = document.getElementById("gate");
+  const canvas = document.getElementById("unity-canvas");
+  const fsBtn = document.getElementById("fs-btn");
+  let got = 0, instance = null;
+
+  const mb = n => (n / 1048576).toFixed(1);
+  function setProgress(p, text) {
+    fill.style.width = (p * 100).toFixed(1) + "%";
+    statusEl.textContent = text;
+  }
+  function fail(msg) {
+    bar.hidden = true;
+    statusEl.classList.add("err");
+    statusEl.textContent = msg;
+    btn.hidden = false; btn.textContent = "다시 시도"; btn.disabled = false;
+  }
+  async function fetchPart(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url} 응답 ${res.status}`);
+    const reader = res.body.getReader();
+    const chunks = [];
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value); got += value.length;
+      setProgress(Math.min(got / TOTAL, 1) * 0.85, `내려받는 중 ${mb(got)} / ${mb(TOTAL)} MB`);
+    }
+    return new Blob(chunks);
+  }
+  async function assemble(p) {
+    const parts = [];
+    for (const f of p.files) parts.push(await fetchPart(f));
+    const raw = await new Response(new Blob(parts).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+    return URL.createObjectURL(new Blob([raw], { type: p.type }));
+  }
+  function loadScript(src) {
+    return new Promise((ok, no) => {
+      const s = document.createElement("script");
+      s.src = src; s.onload = ok; s.onerror = () => no(new Error(`${src}을 불러오지 못했습니다`));
+      document.head.appendChild(s);
+    });
+  }
+  async function start() {
+    if (!("DecompressionStream" in window) || !window.WebAssembly) {
+      fail("이 브라우저는 게임 실행을 지원하지 않습니다. PC의 Chrome이나 Edge 최신 버전에서 열어 주세요.");
+      return;
+    }
+    btn.disabled = true; btn.hidden = true; note.hidden = true;
+    statusEl.classList.remove("err");
+    bar.hidden = false; got = 0;
+    setProgress(0, "준비 중");
+    try {
+      const [codeUrl, dataUrl] = await Promise.all([assemble(PARTS.code), assemble(PARTS.data), loadScript("game/WebGL.loader.js")]);
+      setProgress(0.85, "게임을 여는 중");
+      canvas.hidden = false;
+      instance = await createUnityInstance(canvas, {
+        dataUrl, codeUrl,
+        frameworkUrl: "game/WebGL.framework.js",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "guildmanager",
+        productVersion: "1.0",
+      }, p => setProgress(0.85 + p * 0.15, `게임을 여는 중 ${Math.round(p * 100)}%`));
+      gate.hidden = true;
+      fsBtn.disabled = false;
+      canvas.focus();
+    } catch (e) {
+      canvas.hidden = true;
+      fail(`게임을 불러오지 못했습니다. (${e && e.message ? e.message : e}) 새로 고침 후 다시 시도해 주세요.`);
+    }
+  }
+  btn.addEventListener("click", start);
+  fsBtn.addEventListener("click", () => { try { instance && instance.SetFullscreen(1); } catch (e) {} });
+})();
+</script>
+
+</body>
+</html>
