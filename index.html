@@ -33,23 +33,28 @@ body { background: var(--night); color: var(--ink); font-family: var(--body); fo
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 button { font: inherit; color: inherit; }
 
-/* ---------- 첫 화면 ---------- */
-.home { min-height: 100%; display: grid; align-content: center; padding: 48px 20px; background:
-  linear-gradient(to bottom, rgba(23,18,42,.55), rgba(23,18,42,.92) 70%, var(--night)),
-  #0d0a18 url("cover.jpg") center top / cover no-repeat; image-rendering: pixelated; }
-.home-inner { width: 100%; max-width: 1040px; margin: 0 auto; display: grid; gap: 36px; }
-.home-head { display: grid; gap: 10px; text-align: center; justify-items: center; }
+/* ---------- 첫 화면: 나를 먼저, 작업은 그 아래 ---------- */
+.home { min-height: 100%; padding: 72px 20px 56px; }
+.home-inner { width: 100%; max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
+.home-head { display: grid; gap: 14px; max-width: 640px; }
 .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
-.home h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 46px); line-height: 1.25; margin: 0; text-wrap: balance; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
-.home-head p { margin: 0; max-width: 56ch; color: var(--ink); text-shadow: 0 1px 8px rgba(0,0,0,.7); }
+.home h1 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7vw, 64px); line-height: 1.15; margin: 0; letter-spacing: .02em; }
+.home .role { font-size: 18px; font-weight: 500; margin: 0; }
+.home-head p.about { margin: 0; color: var(--muted); max-width: 58ch; }
 
+.works-label { display: flex; align-items: baseline; gap: 14px; margin: 0 0 18px; font-family: var(--display); font-weight: 800; font-size: 22px; }
+.works-label small { font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--muted); }
 .choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 @media (max-width: 760px) { .choices { grid-template-columns: 1fr; } }
-.choice { display: grid; grid-template-rows: auto auto 1fr auto; gap: 8px; text-align: left; padding: 24px 22px 20px; background: rgba(28,21,50,.88); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; min-width: 0; transition: border-color .15s, transform .15s; }
+.choice { display: grid; grid-template-rows: auto auto auto auto 1fr auto; align-content: start; gap: 8px; text-align: left; padding: 0 0 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; cursor: pointer; min-width: 0; transition: border-color .15s, transform .15s; }
+.choice > :not(.thumb) { margin-inline: 20px; }
 .choice:hover { border-color: var(--gold); transform: translateY(-3px); }
 @media (prefers-reduced-motion: reduce) { .choice:hover { transform: none; } }
+.choice .thumb { aspect-ratio: 16 / 9; max-width: 100%; background: #0d0a18 center top / cover no-repeat; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.choice .thumb.pixel { image-rendering: pixelated; }
 .choice .kind { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--gold); }
-.choice h2 { font-family: var(--display); font-weight: 800; font-size: 24px; line-height: 1.3; margin: 0; }
+.choice h2 { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1.3; margin: 0; }
+.choice .proj { font-size: 13px; color: var(--ink); opacity: .8; margin-top: -4px; }
 .choice p { margin: 0; font-size: 14.5px; color: var(--muted); }
 .choice .go { font-size: 14px; font-weight: 600; color: var(--gold); }
 
@@ -94,31 +99,41 @@ button { font: inherit; color: inherit; }
 <!-- 첫 화면 -->
 <div class="home" id="v-home">
   <div class="home-inner">
-    <div class="home-head">
-      <div class="eyebrow">임은종 · 게임 기획 포트폴리오</div>
-      <h1>길드 매니저</h1>
-      <p>모험가를 고용해 파티를 짜고 던전으로 보내, 자동 전투를 지켜보며 더 갈지, 돌아갈지, 도망칠지를 판단하는 길드 경영 RPG입니다.</p>
-    </div>
-    <div class="choices">
-      <button class="choice" type="button" data-go="play">
-        <span class="kind">PLAY</span>
-        <h2>게임 플레이</h2>
-        <p>설치 없이 브라우저에서 바로 실행되는 WebGL 버전입니다. 튜토리얼부터 데모 엔딩까지 담겨 있습니다.</p>
-        <span class="go">플레이하러 가기 →</span>
-      </button>
-      <button class="choice" type="button" data-go="plans">
-        <span class="kind">GDD</span>
-        <h2>게임 기획서</h2>
-        <p>구현과 측정을 거쳐 고쳐 쓴 통합본(26쪽)과, 처음 쓴 초안(8쪽)입니다.</p>
-        <span class="go">기획서 보기 →</span>
-      </button>
-      <button class="choice" type="button" data-go="reverse">
-        <span class="kind">REVERSE</span>
-        <h2>역기획서</h2>
-        <p>섀도우 오브 워의 네메시스 시스템을 계급 구조와 생성·변동 규칙으로 다시 쓴 문서(8쪽)입니다.</p>
-        <span class="go">역기획서 보기 →</span>
-      </button>
-    </div>
+    <header class="home-head">
+      <div class="eyebrow">Game Design Portfolio</div>
+      <h1>임은종</h1>
+      <p class="role">게임 기획자 지망</p>
+      <p class="about">기획서를 쓰는 데서 멈추지 않고, 직접 만들어 보고, 측정한 결과로 다시 고치는 방식으로 일합니다. 혼자 기획하고 개발한 길드 경영 RPG와, 출시작의 핵심 시스템을 뜯어 본 역기획서를 담았습니다.</p>
+    </header>
+    <section aria-labelledby="works">
+      <h2 class="works-label" id="works">작업 <small>보고 싶은 항목을 골라 주세요</small></h2>
+      <div class="choices">
+        <button class="choice" type="button" data-go="play">
+          <span class="thumb pixel" style="background-image:url('cover.jpg')"></span>
+          <span class="kind">PLAY</span>
+          <h2>게임 플레이</h2>
+          <span class="proj">길드 매니저 · 1인 개발 데모</span>
+          <p>설치 없이 브라우저에서 바로 실행되는 WebGL 버전입니다. 튜토리얼부터 데모 엔딩까지 담겨 있습니다.</p>
+          <span class="go">플레이하러 가기 →</span>
+        </button>
+        <button class="choice" type="button" data-go="plans">
+          <span class="thumb" style="background-image:url('docs/plan-01.jpg')"></span>
+          <span class="kind">GDD</span>
+          <h2>게임 기획서</h2>
+          <span class="proj">길드 매니저 · 통합본 26쪽, 초안 8쪽</span>
+          <p>처음 쓴 초안과, 구현과 측정을 거쳐 고쳐 쓴 통합본입니다.</p>
+          <span class="go">기획서 보기 →</span>
+        </button>
+        <button class="choice" type="button" data-go="reverse">
+          <span class="thumb" style="background-image:url('docs/nemesis-01.jpg')"></span>
+          <span class="kind">REVERSE</span>
+          <h2>역기획서</h2>
+          <span class="proj">섀도우 오브 워 · 네메시스 시스템 8쪽</span>
+          <p>계급 구조와 생성·변동 규칙을 재구성하고, 설계 의도와 문제점·개선안까지 정리했습니다.</p>
+          <span class="go">역기획서 보기 →</span>
+        </button>
+      </div>
+    </section>
   </div>
 </div>
 
@@ -126,7 +141,7 @@ button { font: inherit; color: inherit; }
 <div class="view" id="v-play" hidden>
   <div class="bar-top">
     <button class="back" type="button" data-go="">← 처음으로</button>
-    <strong>게임 플레이</strong>
+    <strong>게임 플레이 · 길드 매니저</strong>
   </div>
   <div class="play-body">
     <div class="stage">
@@ -168,7 +183,7 @@ button { font: inherit; color: inherit; }
     nemesis: { label: "네메시스", title: "섀도우 오브 워 네메시스 시스템 역기획서", pages: 8 },
   };
   const GROUPS = {
-    plans:   { title: "게임 기획서", docs: ["plan", "draft"] },
+    plans:   { title: "게임 기획서 · 길드 매니저", docs: ["plan", "draft"] },
     reverse: { title: "역기획서", docs: ["nemesis"] },
   };
   const vHome = document.getElementById("v-home");
